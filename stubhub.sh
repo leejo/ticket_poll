@@ -1,4 +1,4 @@
-#!bash
+#!/usr/bin/env bash
 
 #
 # usage:
@@ -9,6 +9,9 @@
 #
 set -eu
 
+date
+
+PERL=/Users/leejohnson/perl5/perlbrew/perls/perl-5.36.1/bin/perl
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 TICKETS=$1
@@ -16,7 +19,7 @@ MAX_PRICE=$2
 URL="$3?quantity=$TICKETS"
 
 curl $URL > $SCRIPT_DIR/stubhub.html
-for price in $($SCRIPT_DIR/stubhub.pl --html $SCRIPT_DIR/stubhub.html --tickets $TICKETS --max-price $MAX_PRICE)
+for price in $($PERL $SCRIPT_DIR/stubhub.pl --html $SCRIPT_DIR/stubhub.html --tickets $TICKETS --max-price $MAX_PRICE)
 do
 	/opt/homebrew/bin/ntfy publish tickets "$TICKETS Stubhub tickets available for $price each 😀"
 done
